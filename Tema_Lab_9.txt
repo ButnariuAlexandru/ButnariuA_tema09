@@ -1,0 +1,32 @@
+1. Utilizați pentru texturare imagini cu transparență și fără. Ce observați?
+Fișierul JPG nu conține canal alpha, deci textura se aplică integral și opac pe suprafața obiectului 3D. Ea acoperă complet fața cubului, iar aspectul ei este influențat doar de culoarea setată prin GL.Color3() și eventual de iluminare.
+Fișierul PNG poate include transparență, iar din cod  reiese că imaginea este încărcată cu canal alpha.
+Totuși, pentru ca transparența să fie vizibilă în scenă este necesară activarea blending-ului . În lipsa acestor setări, părțile transparente ale PNG-ului vor apărea opace.
+
+
+2. Ce formate de imagine pot fi aplicate în procesul de texturare în OpenGL?
+În aplicație, texturile sunt încărcate prin System.Drawing.Bitmap, ceea ce înseamnă că pot fi folosite toate formatele pe care le suportă această clasă:
+JPEG, PNG, BMP, GIF, TIFF.
+Indiferent de formatul fișierului, OpenGL primește în final date în format RGBA, deci poate gestiona texturi cu sau fără canal alpha, atât timp cât imaginea poate fi deschisă în .NET.
+
+
+3. Specificați ce se întâmplă atunci când se modifică culoarea (prin manipularea canalelor RGB) a obiectului texturat.
+În modul standard de texturare al OpenGL, culoarea texturii este multiplicată cu culoarea curentă setată prin GL.Color3():
+Culoare albă (1,1,1), textura rămâne neschimbată, deoarece se înmulțește cu 1.
+Culoare roșie sau albastră: textura capătă o tentă puternică în culoarea aleasă. De exemplu, setarea roșului elimină componentele verde și albastru din textură, păstrând doar componenta roșie.
+
+
+4. Ce deosebiri există între scena ce utilizează obiecte texturate în modul iluminare activat, respectiv dezactivat?
+
+Iluminare activată
+
+-Textura este influențată de componentele luminii: ambientală, difuză și speculară.
+-Obiectul prezintă umbre, zone luminoase și reflexii.
+-Fețele orientate spre sursa de lumină devin mai luminoase, cele opuse mai întunecate.
+-Rezultatul este o scenă mult mai realistă și cu volum.
+
+Iluminare dezactivată
+
+-Obiectul este desenat fără efecte de lumină.
+-Textura este afișată uniform pe toate fețele, fără umbre sau evidențieri.
+-Aspectul devine plat și mai puțin realist, însă randarea este mai rapidă.
